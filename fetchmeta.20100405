@@ -1,0 +1,131 @@
+#!/bin/bash
+
+#
+# fetchmeta
+#
+# This script replicates the four UK federation metadata files from
+# the master site to a local directory which is in turn served out
+# to federation clients.
+#
+# As well as replication, this script performs integrity checking on
+# the files using the embedded digital signature and a copy of the
+# federation's signing certificate to make sure that a spurious
+# (damaged or subverted) copy of the metadata is never put into service.
+#
+
+HOME=${1:-~wayf}
+PATH="$PATH:/usr/local/bin"
+
+#
+# Names of the metadata files to be replicated.
+#
+FILES="
+ ukfederation-metadata.xml
+ ukfederation-wayf.xml
+ ukfederation-test.xml
+ ukfederation-back.xml
+ ukfederation-export.xml
+"
+
+#
+# Site from which we pull the metadata files.
+#
+MASTER=http://master.metadata.ukfederation.org.uk
+
+#
+# Name of initial mirror directory; contains a copy of the
+# metadata files that duplicates the master site's copy, but
+# is not integrity checked.
+#
+MIRROR=mirror
+
+#
+# Name of directory containing verified copies of the files.
+# The actual verified copies are ignored because metadatatool
+# destroys the timestamp and may reformat the file.
+#
+VERIFY=verify
+
+#
+# Name of the live directory, which will contain a copy of the
+# integrity checked metadata files, plus the copy of the signing
+# certificate that we will use to integrity check incoming files.
+#
+# NOTE: the signing certificate files are never overwritten by this script.
+#
+LIVE=$HOME/metadata
+
+#
+# Acquire Java configuration.
+#
+JAVA_HOME=/usr/jdk/latest
+export JAVA_HOME
+
+#
+# IDP_HOME is where we find metadatatool
+#
+export IDP_HOME=$HOME/metadist/shibboleth-1.3.2-install
+MDT="$IDP_HOME/bin/metadatatool --keystore $LIVE/ukfederation.jks --alias ukfederation"
+
+#
+# Location of tools
+#
+WGET=wget
+RSYNC=rsync
+
+#
+# Base wait time.  Set to 0 for testing, higher as a mean random delay
+# for each transfer.  This means things won't cluster quite so tightly
+# around the nominal update time even if all downloaders start at the
+# same time.
+#
+BASEWAIT=30
+
+#
+# Mirror the files from the master metadata site into our local
+# directory prior to checking.
+#
+for file in $FILES
+do
+  $WGET --timestamping --quiet \
+      --wait=$BASEWAIT --random-wait \
+      --no-directories --no-host-directories \
+      --directory-prefix=$MIRROR \
+      $MASTER/$file
+done
+
+#
+# Prepare the verification directory.
+#
+touch $VERIFY/touched
+rm -f $VERIFY/*
+verified=0
+
+#
+# Now verify the signature on the mirrored files using metadatatool.
+#
+# The output from the verification step is discarded; if verification
+# fails, the output file won't be created. 
+#
+for file in $FILES
+do
+  $MDT --in $MIRROR/$file --out $VERIFY/$file
+  if [ -e $VERIFY/$file ]; then
+      verified=$(( $verified + 1 ))
+  fi
+done
+
+#
+# If we managed to verify all the mirrored files, move them
+# across to the live directory in a single operation.
+#
+if [ $verified -eq 5 ]; then
+    $RSYNC --times $MIRROR/*.xml $LIVE
+else
+    echo "failed to verify all mirrored files: $verified"
+    exit 1
+fi
+
+#
+# END
+#
