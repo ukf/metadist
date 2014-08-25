@@ -123,7 +123,7 @@ do
 done
 
 #
-# If we managed to verify all the mirrored files, move them
+# If we managed to verify all the mirrored files, move them
 # across to the live directory in a single operation.
 #
 if [ $verified -eq 7 ]; then
