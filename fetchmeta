@@ -25,6 +25,7 @@ FILES="
  ukfederation-test.xml
  ukfederation-back.xml
  ukfederation-export.xml
+ ukfederation-export-preview.xml
  ukfederation-cdsall.xml
 "
 
@@ -125,7 +126,7 @@ done
 # If we managed to verify all the mirrored files, move them
 # across to the live directory in a single operation.
 #
-if [ $verified -eq 6 ]; then
+if [ $verified -eq 7 ]; then
     $RSYNC --times $MIRROR/*.xml $LIVE
 else
     echo "failed to verify all mirrored files: $verified"
