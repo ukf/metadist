@@ -3,7 +3,7 @@
 #
 # fetchmeta
 #
-# This script replicates the four UK federation metadata files from
+# This script replicates the UK federation metadata files from
 # the master site to a local directory which is in turn served out
 # to federation clients.
 #
