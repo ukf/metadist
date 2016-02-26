@@ -17,3 +17,9 @@ fi
 # Reduce BASEWAIT so that tests can be performed more quickly.
 #
 BASEWAIT=0
+
+#
+# Indicate that we are testing, so that more diagnostics
+# can be output.
+#
+TESTING=1

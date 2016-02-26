@@ -101,6 +101,9 @@ rm -f $MIRROR/*
 #
 for file in $FILES
 do
+  if [ -n "${TESTING}" ]; then
+    echo Fetching ${file}...
+  fi
   $WGET --timestamping --quiet \
       --wait=$BASEWAIT --random-wait \
       --no-directories --no-host-directories \
@@ -124,6 +127,9 @@ verified=0
 #
 for file in $FILES
 do
+  if [ -n "${TESTING}" ]; then
+    echo Verifying ${file}...
+  fi
   $MDT --in $MIRROR/$file --out $VERIFY/$file
   if [ -e $VERIFY/$file ]; then
     if test `find $VERIFY/$file -mtime -7`; then
@@ -137,6 +143,9 @@ done
 # across to the live directory in a single operation.
 #
 if [ $verified -eq 7 ]; then
+    if [ -n "${TESTING}" ]; then
+      echo Syncing to ${LIVE}...
+    fi
     $RSYNC --times $MIRROR/*.xml $LIVE
 else
     echo "failed to verify all mirrored files: $verified"
