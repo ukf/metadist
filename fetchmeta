@@ -57,20 +57,15 @@ LIVE=$HOME/metadata
 #
 # Acquire Java configuration.
 #
-JAVA_HOME=/usr/jdk/latest
+JAVA_HOME=/var/UKFED/java/jre1.8.0_73
 export JAVA_HOME
-
-#
-# IDP_HOME is where we find metadatatool
-#
-export IDP_HOME=$HOME/metadist/shibboleth-1.3.2-install
-MDT="$IDP_HOME/bin/metadatatool --keystore ukfederation.jks --alias ukfederation"
 
 #
 # Location of tools
 #
 WGET=wget
 RSYNC=rsync
+XMLSECTOOL=/var/UKFED/xmlsectool-1.2.0/xmlsectool.sh
 
 #
 # Base wait time.  Set to 0 for testing, higher as a mean random delay
@@ -130,7 +125,9 @@ do
   if [ -n "${TESTING}" ]; then
     echo Verifying ${file}...
   fi
-  $MDT --in $MIRROR/$file --out $VERIFY/$file
+  ${XMLSECTOOL} --verifySignature --signatureRequired --quiet \
+    --certificate ukfederation-2014.pem \
+    --inFile $MIRROR/$file --outFile $VERIFY/$file
   if [ -e $VERIFY/$file ]; then
     if test `find $VERIFY/$file -mtime -7`; then
       verified=$(( $verified + 1 ))
