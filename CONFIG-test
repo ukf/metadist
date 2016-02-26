@@ -1,0 +1,19 @@
+#
+# Test configuration for the fetchmeta script.
+#
+# Link CONFIG to this file during testing.
+#
+
+#
+# Redirect output to a local subdirectory (created if necessary)
+# so that the live metadata is never touched.
+#
+LIVE=test-output
+if [ ! -d $LIVE ]; then
+    mkdir $LIVE
+fi
+
+#
+# Reduce BASEWAIT so that tests can be performed more quickly.
+#
+BASEWAIT=0

@@ -2,5 +2,9 @@
 \#*
 .\#*
 
+# Don't save CONFIG, which should just be a link
+CONFIG
+
 mirror/
+test-output/
 verify/

@@ -81,6 +81,16 @@ RSYNC=rsync
 BASEWAIT=30
 
 #
+# Override the above settings from a CONFIG file, if there is one.
+#
+if [ -f CONFIG ]; then
+  . CONFIG
+  echo CONFIG settings in effect:
+  echo ...LIVE is ${LIVE}
+  echo ...BASEWAIT is ${BASEWAIT}
+fi
+
+#
 # Prepare the mirror directory.
 #
 touch $MIRROR/touched
