@@ -80,9 +80,11 @@ BASEWAIT=30
 #
 if [ -f CONFIG ]; then
   . CONFIG
-  echo CONFIG settings in effect:
-  echo ...LIVE is ${LIVE}
-  echo ...BASEWAIT is ${BASEWAIT}
+  if [ -n "${TESTING}" ]; then
+    echo CONFIG settings in effect:
+    echo ...LIVE is ${LIVE}
+    echo ...BASEWAIT is ${BASEWAIT}
+  fi
 fi
 
 #
