@@ -1,0 +1,10 @@
+#!/bin/bash
+
+#
+# The output metadata will be created in a volume of the following
+# name. It is implicitly created by "docker run" if it does not
+# already exist.
+#
+VOLUME=metadata
+
+docker run --rm -it --volume=${VOLUME}:/metadata metadist

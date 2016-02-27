@@ -1,0 +1,8 @@
+#!/bin/bash
+
+#
+# Show us what's in the metadata volume created by running the metadist container.
+#
+VOLUME=metadata
+
+docker run --rm -it --volume=metadata:/metadata busybox ls -l /metadata

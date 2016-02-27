@@ -1,0 +1,8 @@
+#!/bin/bash
+
+#
+# Clear whatever is in the metadata volume.
+#
+VOLUME=metadata
+
+docker run --rm -it --volume=metadata:/metadata busybox find /metadata -type f -print -delete

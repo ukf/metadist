@@ -1,0 +1,19 @@
+#
+# Docker configuration for the fetchmeta script.
+#
+# Copied into the image as CONFIG during container build.
+#
+LIVE=/metadata
+XMLSECTOOL=xmlsectool-1.2.0/xmlsectool.sh
+
+#
+# Reduce BASEWAIT so that tests can be performed more quickly.
+#
+#BASEWAIT=0
+
+#
+# Indicate that we are testing, so that more diagnostics
+# can be output.
+#
+#TESTING=1
+
