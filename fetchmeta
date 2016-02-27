@@ -57,7 +57,7 @@ LIVE=$HOME/metadata
 #
 # Acquire Java configuration.
 #
-JAVA_HOME=/var/UKFED/java/jre1.8.0_73
+JAVA_HOME=${JAVA_HOME-/var/UKFED/java/jre1.8.0_73}
 export JAVA_HOME
 
 #
@@ -118,7 +118,7 @@ verified=0
 # Also verify that the file is no more than 7 days old. GJG 26-april-2012
 #
 # The output from the verification step is discarded; if verification
-# fails, the output file won't be created. 
+# fails, the output file won't be created.
 #
 for file in $FILES
 do
