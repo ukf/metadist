@@ -5,4 +5,4 @@
 #
 VOLUME=metadata
 
-docker run --rm -it --volume=metadata:/metadata busybox find /metadata -type f -print -delete
+docker run --rm -it --volume=${VOLUME}:/metadata busybox find /metadata -type f -print -delete

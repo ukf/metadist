@@ -5,4 +5,4 @@
 #
 VOLUME=metadata
 
-docker run --rm -it --volume=metadata:/metadata busybox ls -l /metadata
+docker run --rm -it --volume=${VOLUME}:/metadata busybox ls -l /metadata
